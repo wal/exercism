@@ -1,43 +1,47 @@
 class Bob
 
-  RESPONSES = {
-    question: 'Sure.',
-    silence: 'Fine. Be that way!',
-    shouting: 'Woah, chill out!',
-    default: 'Whatever.'    
-  }
-
   def hey(message_text)
-
-    message = Message.new(message_text)
-
-    case
-    when message.empty?
-      RESPONSES[:silence]
-    when message.all_caps?
-      RESPONSES[:shouting]
-    when message.question?
-      RESPONSES[:question]
-    else
-      RESPONSES[:default]
-    end    
+    Responder.new(message_text).respond
   end
 
-  class Message
+  class Responder
+
+    RESPONSES = {
+        question: 'Sure.',
+        silence: 'Fine. Be that way!',
+        shouting: 'Woah, chill out!',
+        default: 'Whatever.'
+    }
+
     def initialize(message_text)
-      @message_text = message_text.strip
+      @message = message_text.strip
     end
 
+    def respond
+      case
+        when empty?
+          RESPONSES[:silence]
+        when all_caps?
+          RESPONSES[:shouting]
+        when question?
+          RESPONSES[:question]
+        else
+          RESPONSES[:default]
+      end
+    end
+
+    private
+
     def empty?
-      @message_text.empty?
+      @message.empty?
     end
 
     def all_caps?
-      @message_text == @message_text.upcase
+      @message == @message.upcase
     end
 
     def question?
-      @message_text.end_with? '?'
+      @message.end_with? '?'
     end
   end
 

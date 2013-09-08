@@ -1,9 +1,5 @@
 class Bob
 
-  ALL_CAPS = /\A[^a-z]+\Z/
-  QUESTION = /.*\?\Z/
-  EMPTY_STRING = /\A\s*\Z/
-
   RESPONSES = {
     question: 'Sure.',
     silence: 'Fine. Be that way!',
@@ -11,17 +7,38 @@ class Bob
     default: 'Whatever.'    
   }
 
-  def hey(message)
-    
-    case message
-    when EMPTY_STRING; 
+  def hey(message_text)
+
+    message = Message.new(message_text)
+
+    case
+    when message.empty?
       RESPONSES[:silence]
-    when ALL_CAPS
+    when message.all_caps?
       RESPONSES[:shouting]
-    when QUESTION
+    when message.question?
       RESPONSES[:question]
     else
       RESPONSES[:default]
     end    
-  end    
+  end
+
+  class Message
+    def initialize(message_text)
+      @message_text = message_text.strip
+    end
+
+    def empty?
+      @message_text.empty?
+    end
+
+    def all_caps?
+      @message_text == @message_text.upcase
+    end
+
+    def question?
+      @message_text.end_with? '?'
+    end
+  end
+
 end

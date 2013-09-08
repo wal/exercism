@@ -19,9 +19,9 @@ class Bob
 
     def respond
       case
-        when empty?
+        when silence?
           RESPONSES[:silence]
-        when all_caps?
+        when shouting?
           RESPONSES[:shouting]
         when question?
           RESPONSES[:question]
@@ -32,11 +32,11 @@ class Bob
 
     private
 
-    def empty?
+    def silence?
       @message.empty?
     end
 
-    def all_caps?
+    def shouting?
       @message == @message.upcase
     end
 
